@@ -176,6 +176,7 @@ npm run push
 | `teardownTrigger()` | Remove the trigger |
 | `triggerStatus()` | Show current trigger info |
 | `clearProcessedFiles()` | Reset processed-file history (reprocesses everything) |
+| `debugSourceFolder()` | List all files in the source folder with MIME types and processed status — use when a file isn't being picked up |
 
 ---
 
