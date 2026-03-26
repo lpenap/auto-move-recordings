@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node build.js",
     "push":  "node build.js && clasp push",
-    "open":  "clasp open"
+    "open":  "clasp open-script"
   },
   "engines": {
     "node": ">=16"
