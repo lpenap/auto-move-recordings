@@ -5,7 +5,11 @@
   "scripts": {
     "build": "node build.js",
     "push":  "node build.js && clasp push",
-    "open":  "clasp open-script"
+    "open":  "clasp open-script",
+    "test":  "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
   },
   "engines": {
     "node": ">=16"

@@ -78,3 +78,8 @@ function isWithinTimeWindow() {
   const hour = parseInt(Utilities.formatDate(new Date(), getUserTimezone(), 'H'), 10);
   return hour >= CONFIG.timeWindow.startHour && hour < CONFIG.timeWindow.endHour;
 }
+
+// Node.js compatibility — ignored by Apps Script
+if (typeof module !== 'undefined') {
+  module.exports = { main: main, processFile: processFile, isWithinTimeWindow: isWithinTimeWindow };
+}

@@ -59,3 +59,8 @@ function log(message) {
   var timestamp = Utilities.formatDate(new Date(), getUserTimezone(), 'yyyy-MM-dd HH:mm:ss');
   console.log('[' + timestamp + '] ' + formatted);
 }
+
+// Node.js compatibility — ignored by Apps Script
+if (typeof module !== 'undefined') {
+  module.exports = { matchRule: matchRule, getUserTimezone: getUserTimezone, log: log };
+}

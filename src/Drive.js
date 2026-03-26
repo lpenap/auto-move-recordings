@@ -125,3 +125,17 @@ function clearProcessedFiles() {
   keys.forEach(function (k) { PropertiesService.getScriptProperties().deleteProperty(k); });
   log('Cleared %s processed-file record(s).', keys.length);
 }
+
+// Node.js compatibility — ignored by Apps Script
+if (typeof module !== 'undefined') {
+  module.exports = {
+    getSourceFolder: getSourceFolder,
+    getUnprocessedFiles: getUnprocessedFiles,
+    getOrCreateYearFolder: getOrCreateYearFolder,
+    moveFile: moveFile,
+    markAsProcessed: markAsProcessed,
+    isProcessed: isProcessed,
+    clearProcessedFiles: clearProcessedFiles,
+    debugSourceFolder: debugSourceFolder,
+  };
+}

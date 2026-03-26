@@ -56,3 +56,8 @@ function hasMeetLink(event) {
     return false;
   }
 }
+
+// Node.js compatibility — ignored by Apps Script
+if (typeof module !== 'undefined') {
+  module.exports = { findMatchingCalendarEvent: findMatchingCalendarEvent, hasMeetLink: hasMeetLink };
+}

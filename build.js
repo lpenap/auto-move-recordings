@@ -85,3 +85,8 @@ const output =
 
 fs.writeFileSync(outputPath, output);
 console.log('✓ src/Config.js generated from config.json');
+
+// Node.js compatibility — export pure functions for testing
+if (require.main !== module) {
+  module.exports = { serializePattern: serializePattern };
+}
