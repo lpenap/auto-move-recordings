@@ -7,7 +7,7 @@ year, based on matching calendar event names.
 ## How it works
 
 1. A time-based trigger runs `main()` every N minutes, **only during your configured hours**.
-2. It scans your `Meet Recordings` folder for unprocessed video files.
+2. It scans the configured source folder (by ID) for unprocessed video files.
 3. For each recording, it searches your calendar for a Google Meet event that
    ended near the file's creation time.
 4. The event title is matched against your configured rules (first match wins).
@@ -67,20 +67,22 @@ Create `.clasp.json` (gitignored — do not commit it):
 
 ### Step 4 — Find your configuration values
 
+#### Folder IDs (source and destination)
+
+Open any folder in Google Drive. The URL looks like:
+```
+https://drive.google.com/drive/folders/1ABCxyz_THIS_IS_THE_ID
+```
+
+Copy the ID after `/folders/`. Use this for both `sourceFolderId` (your Meet Recordings folder) and each rule's `destinationFolderId`.
+
+> **Shared Drives**: same method — open the subfolder inside the Shared Drive and copy the ID from the URL.
+
 #### Calendar ID
 
 1. Open [Google Calendar](https://calendar.google.com)
 2. Click the three dots next to your calendar → **Settings and sharing**
 3. Scroll to **Calendar ID** — looks like `you@company.com` or `abc123@group.calendar.google.com`
-
-#### Destination folder IDs
-
-Open the destination folder in Google Drive. The URL looks like:
-```
-https://drive.google.com/drive/folders/1ABCxyz_THIS_IS_THE_ID
-```
-
-> **Shared Drives**: same method — open the subfolder inside the Shared Drive and copy the ID from the URL.
 
 ---
 
@@ -94,7 +96,7 @@ Edit `config.json` with your values (this file is gitignored):
 
 ```json
 {
-  "sourceFolderName": "Meet Recordings",
+  "sourceFolderId": "1ABCxyz...",
   "calendarId": "you@yourcompany.com",
   "calendarLookbackHours": 4,
   "pollIntervalMinutes": 5,
@@ -204,6 +206,9 @@ auto-move-recordings/
 ---
 
 ## Troubleshooting
+
+**"Source folder not found"**
+→ Double-check `sourceFolderId` in `config.json`. Get it from the folder URL in Google Drive.
 
 **"Calendar not found"**
 → Double-check `calendarId` in `config.json`. Use the full calendar email address.
