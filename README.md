@@ -155,6 +155,27 @@ This runs `build.js` (generates `src/Config.js` from `config.json`) then `clasp 
 
 ---
 
+## Local testing
+
+Unit tests run locally with Jest — no Google account or Apps Script deployment needed.
+
+```bash
+npm install   # first time only
+npm test
+```
+
+| Test file | What it covers |
+|---|---|
+| `test/matchRule.test.js` | String/regex patterns, case-insensitivity, rule priority |
+| `test/timeWindow.test.js` | Office hours guard, boundary conditions |
+| `test/calendar.test.js` | Meet link detection, event selection by proximity |
+| `test/build.test.js` | Pattern serialization (string vs regex output) |
+
+Google Apps Script globals (DriveApp, CalendarApp, etc.) are stubbed in `test/setup.js`.
+Source files export their functions via a `module.exports` guard that is silently ignored by Apps Script at runtime.
+
+---
+
 ## Workflow for config changes
 
 ```bash
