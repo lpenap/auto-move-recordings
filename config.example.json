@@ -1,5 +1,5 @@
 {
-  "sourceFolderName": "Meet Recordings",
+  "sourceFolderId": "SOURCE_FOLDER_ID_HERE",
   "calendarId": "YOUR_CALENDAR_ID_HERE",
   "calendarLookbackHours": 4,
   "pollIntervalMinutes": 5,

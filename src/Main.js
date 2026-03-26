@@ -12,7 +12,7 @@ function main() {
 
   const sourceFolder = getSourceFolder();
   if (!sourceFolder) {
-    log('ERROR: Source folder not found: "%s"', CONFIG.sourceFolderName);
+    log('ERROR: Source folder not found. Check sourceFolderId in config.json: "%s"', CONFIG.sourceFolderId);
     return;
   }
 

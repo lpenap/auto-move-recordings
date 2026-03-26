@@ -4,12 +4,15 @@
  */
 
 /**
- * Returns the source folder (Meet Recordings) by name from My Drive.
+ * Returns the source folder by ID.
  * @returns {GoogleAppsScript.Drive.Folder|null}
  */
 function getSourceFolder() {
-  const folders = DriveApp.getFoldersByName(CONFIG.sourceFolderName);
-  return folders.hasNext() ? folders.next() : null;
+  try {
+    return DriveApp.getFolderById(CONFIG.sourceFolderId);
+  } catch (e) {
+    return null;
+  }
 }
 
 /**
@@ -92,6 +95,24 @@ function markAsProcessed(fileId) {
 function isProcessed(fileId) {
   return PropertiesService.getScriptProperties()
     .getProperty(PROCESSED_KEY_PREFIX + fileId) !== null;
+}
+
+/**
+ * Utility: lists all files in the source folder with their MIME types.
+ * Run manually to diagnose why a file isn't being picked up.
+ */
+function debugSourceFolder() {
+  const folder = getSourceFolder();
+  if (!folder) { log('Source folder not found: "%s"', CONFIG.sourceFolderName); return; }
+
+  const iterator = folder.getFiles();
+  let count = 0;
+  while (iterator.hasNext()) {
+    const file = iterator.next();
+    log('[%s] mime="%s" processed=%s name="%s"',
+      ++count, file.getMimeType(), isProcessed(file.getId()), file.getName());
+  }
+  if (count === 0) log('No files found in "%s"', CONFIG.sourceFolderName);
 }
 
 /**

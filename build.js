@@ -22,7 +22,7 @@ if (!fs.existsSync(configPath)) {
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
 // Validate required fields
-const required = ['calendarId', 'pollIntervalMinutes', 'timeWindow', 'rules'];
+const required = ['sourceFolderId', 'calendarId', 'pollIntervalMinutes', 'timeWindow', 'rules'];
 required.forEach(function (key) {
   if (config[key] === undefined) {
     console.error('Error: missing required field "' + key + '" in config.json');
@@ -70,7 +70,7 @@ const output =
   '\n' +
   '// eslint-disable-next-line no-unused-vars\n' +
   'const CONFIG = {\n' +
-  '  sourceFolderName: ' + JSON.stringify(config.sourceFolderName || 'Meet Recordings') + ',\n' +
+  '  sourceFolderId: ' + JSON.stringify(config.sourceFolderId) + ',\n' +
   '  calendarId: ' + JSON.stringify(config.calendarId) + ',\n' +
   '  calendarLookbackHours: ' + Number(config.calendarLookbackHours || 4) + ',\n' +
   '  pollIntervalMinutes: ' + Number(config.pollIntervalMinutes) + ',\n' +
