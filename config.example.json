@@ -1,0 +1,20 @@
+{
+  "sourceFolderName": "Meet Recordings",
+  "calendarId": "YOUR_CALENDAR_ID_HERE",
+  "calendarLookbackHours": 4,
+  "pollIntervalMinutes": 5,
+  "timeWindow": {
+    "startHour": 9,
+    "endHour": 18
+  },
+  "rules": [
+    {
+      "eventNamePattern": "Weekly Standup",
+      "destinationFolderId": "DESTINATION_FOLDER_ID_1"
+    },
+    {
+      "eventNamePattern": "/client.*review/i",
+      "destinationFolderId": "DESTINATION_FOLDER_ID_2"
+    }
+  ]
+}

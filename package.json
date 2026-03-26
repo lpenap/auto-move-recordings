@@ -1,0 +1,13 @@
+{
+  "name": "auto-move-recordings",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "push":  "node build.js && clasp push",
+    "open":  "clasp open"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
