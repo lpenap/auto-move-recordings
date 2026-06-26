@@ -24,6 +24,26 @@ function matchRule(eventTitle) {
   return null;
 }
 
+/**
+ * Extracts the meeting title from a Google Meet recording file name.
+ *
+ * Meet names recordings as:
+ *   "<Meeting Title> - <YYYY/MM/DD HH:mm GMT±HH:mm> - Recording"
+ * e.g. "Monthly Review - 2026/01/15 10:00 GMT-03:00 - Recording"
+ *
+ * This is the authoritative source of the meeting title — far more reliable
+ * than matching a calendar event by time proximity, which breaks when more
+ * than one meeting falls in the lookback window.
+ *
+ * @param {string} fileName
+ * @returns {string|null} the meeting title, or null if the name doesn't match the pattern
+ */
+function parseEventTitleFromFileName(fileName) {
+  // Strip the trailing " - <YYYY/MM/DD HH:mm ...>" portion; keep everything before it.
+  var match = /^(.+?) - \d{4}\/\d{2}\/\d{2} \d{2}:\d{2}\b/.exec(fileName || '');
+  return match ? match[1].trim() : null;
+}
+
 // Cached timezone from the user's Google account — resolved once per execution.
 var _timezone = null;
 
@@ -62,5 +82,10 @@ function log(message) {
 
 // Node.js compatibility — ignored by Apps Script
 if (typeof module !== 'undefined') {
-  module.exports = { matchRule: matchRule, getUserTimezone: getUserTimezone, log: log };
+  module.exports = {
+    matchRule: matchRule,
+    parseEventTitleFromFileName: parseEventTitleFromFileName,
+    getUserTimezone: getUserTimezone,
+    log: log,
+  };
 }

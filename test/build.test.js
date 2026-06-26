@@ -2,7 +2,7 @@ const { serializePattern } = require('../build.js');
 
 describe('serializePattern', () => {
   test('plain string is JSON-quoted', () => {
-    expect(serializePattern('Dev Monthly')).toBe('"Dev Monthly"');
+    expect(serializePattern('Monthly Review')).toBe('"Monthly Review"');
   });
 
   test('regex string becomes a RegExp literal', () => {

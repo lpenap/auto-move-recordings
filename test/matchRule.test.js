@@ -1,4 +1,4 @@
-const { matchRule } = require('../src/Utils.js');
+const { matchRule, parseEventTitleFromFileName } = require('../src/Utils.js');
 
 beforeEach(() => {
   global.CONFIG = {
@@ -6,7 +6,7 @@ beforeEach(() => {
     rules: [
       { eventNamePattern: 'Weekly Standup',  destinationFolderId: 'folder-standup' },
       { eventNamePattern: /client.*review/i, destinationFolderId: 'folder-client'  },
-      { eventNamePattern: 'Dev Monthly',     destinationFolderId: 'folder-dev'     },
+      { eventNamePattern: 'Monthly Review',   destinationFolderId: 'folder-dev'     },
     ],
   };
 });
@@ -23,7 +23,7 @@ describe('string patterns', () => {
 
   test('substring match', () => {
     expect(matchRule('Team Weekly Standup — Q1')).toMatchObject({ destinationFolderId: 'folder-standup' });
-    expect(matchRule('Dev Monthly — March 2026')).toMatchObject({ destinationFolderId: 'folder-dev' });
+    expect(matchRule('Monthly Review — March 2026')).toMatchObject({ destinationFolderId: 'folder-dev' });
   });
 
   test('no match returns null', () => {
@@ -44,12 +44,35 @@ describe('regex patterns', () => {
   });
 });
 
+describe('parseEventTitleFromFileName', () => {
+  test('extracts title from a standard Meet recording name', () => {
+    expect(parseEventTitleFromFileName('Monthly Review - 2026/01/15 10:00 GMT-03:00 - Recording'))
+      .toBe('Monthly Review');
+  });
+
+  test('keeps hyphens that are part of the title', () => {
+    expect(parseEventTitleFromFileName('Client - Review - 2026/06/24 09:30 GMT-03:00 - Recording'))
+      .toBe('Client - Review');
+  });
+
+  test('parsed title feeds matchRule correctly', () => {
+    const title = parseEventTitleFromFileName('Monthly Review - 2026/01/15 10:00 GMT-03:00 - Recording');
+    expect(matchRule(title)).toMatchObject({ destinationFolderId: 'folder-dev' });
+  });
+
+  test('returns null for a name not in Meet format', () => {
+    expect(parseEventTitleFromFileName('random-video.mp4')).toBeNull();
+    expect(parseEventTitleFromFileName('')).toBeNull();
+    expect(parseEventTitleFromFileName(null)).toBeNull();
+  });
+});
+
 describe('rule priority', () => {
   test('first matching rule wins', () => {
     global.CONFIG.rules = [
       { eventNamePattern: 'Monthly',     destinationFolderId: 'folder-first'  },
-      { eventNamePattern: 'Dev Monthly', destinationFolderId: 'folder-second' },
+      { eventNamePattern: 'Monthly Review', destinationFolderId: 'folder-second' },
     ];
-    expect(matchRule('Dev Monthly')).toMatchObject({ destinationFolderId: 'folder-first' });
+    expect(matchRule('Monthly Review')).toMatchObject({ destinationFolderId: 'folder-first' });
   });
 });

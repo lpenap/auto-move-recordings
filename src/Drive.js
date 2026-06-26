@@ -116,6 +116,28 @@ function debugSourceFolder() {
 }
 
 /**
+ * Utility: shows how a given recording file name would be matched.
+ * Prints the meeting title parsed from the name and which rule (if any) it hits —
+ * no calendar lookup, no file moves. Run manually to diagnose a mismatch.
+ *
+ * @param {string} fileName e.g. "Monthly Review - 2026/01/15 10:00 GMT-03:00 - Recording"
+ */
+function debugMatch(fileName) {
+  const title = parseEventTitleFromFileName(fileName);
+  if (!title) {
+    log('Could not parse a meeting title from "%s" (not in Meet recording format).', fileName);
+    return;
+  }
+  const rule = matchRule(title);
+  if (rule) {
+    log('Parsed title "%s" → matches rule "%s" → destination %s',
+      title, rule.eventNamePattern, rule.destinationFolderId);
+  } else {
+    log('Parsed title "%s" → no rule matched.', title);
+  }
+}
+
+/**
  * Utility: clears all processed-file records.
  * Run manually from the Apps Script editor if you need to reprocess files.
  */
@@ -137,5 +159,6 @@ if (typeof module !== 'undefined') {
     isProcessed: isProcessed,
     clearProcessedFiles: clearProcessedFiles,
     debugSourceFolder: debugSourceFolder,
+    debugMatch: debugMatch,
   };
 }

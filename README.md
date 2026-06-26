@@ -8,9 +8,11 @@ year, based on matching calendar event names.
 
 1. A time-based trigger runs `main()` every N minutes, **only during your configured hours**.
 2. It scans the configured source folder (by ID) for unprocessed video files.
-3. For each recording, it searches your calendar for a Google Meet event that
-   ended near the file's creation time.
-4. The event title is matched against your configured rules (first match wins).
+3. For each recording, it reads the meeting title from the file name — Meet
+   names recordings `<Meeting Title> - <date/time> - Recording`. If the name
+   isn't in that format, it falls back to searching your calendar for a Google
+   Meet event that ended near the file's creation time.
+4. The meeting title is matched against your configured rules (first match wins).
 5. The file is moved to `destinationFolder/YYYY/` — no rename, original filename kept.
 6. Processed files are tracked so they're never moved twice.
 
@@ -200,6 +202,7 @@ npm run push
 | `triggerStatus()` | Show current trigger info |
 | `clearProcessedFiles()` | Reset processed-file history (reprocesses everything) |
 | `debugSourceFolder()` | List all files in the source folder with MIME types and processed status — use when a file isn't being picked up |
+| `debugMatch(fileName)` | Show the meeting title parsed from a recording file name and which rule it matches — no moves, no calendar lookup |
 
 ---
 
@@ -235,8 +238,9 @@ auto-move-recordings/
 → Double-check `calendarId` in `config.json`. Use the full calendar email address.
 
 **Recording not matched / stays in source folder**
-→ Run `main()` manually and check logs. The log shows which calendar event was found
-and whether a rule matched. Adjust `eventNamePattern` if needed.
+→ Run `main()` manually and check logs. The log shows which meeting title was
+detected (from the file name) and whether a rule matched. Adjust `eventNamePattern`
+if needed.
 
 **Files are being re-processed**
 → Run `clearProcessedFiles()` only if you intentionally want to reprocess.

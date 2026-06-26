@@ -41,17 +41,26 @@ function main() {
  */
 function processFile(file) {
   const createdTime = file.getDateCreated();
+  const fileName    = file.getName();
 
-  const event = findMatchingCalendarEvent(createdTime);
-  if (!event) {
-    log('No calendar event found near "%s" (created %s). Skipping.', file.getName(), createdTime);
+  // The recording's file name is the authoritative source of the meeting title
+  // (Meet names recordings "<Title> - <date> - Recording"). Fall back to a
+  // calendar lookup only when the name isn't in the expected format.
+  let eventTitle = parseEventTitleFromFileName(fileName);
+  if (!eventTitle) {
+    const event = findMatchingCalendarEvent(createdTime);
+    if (event) eventTitle = event.getTitle();
+  }
+
+  if (!eventTitle) {
+    log('Could not determine meeting title for "%s" (created %s). Skipping.', fileName, createdTime);
     markAsProcessed(file.getId()); // mark so we don't retry endlessly
     return false;
   }
 
-  const rule = matchRule(event.getTitle());
+  const rule = matchRule(eventTitle);
   if (!rule) {
-    log('No rule matched event "%s". Leaving "%s" in place.', event.getTitle(), file.getName());
+    log('No rule matched event "%s". Leaving "%s" in place.', eventTitle, fileName);
     markAsProcessed(file.getId());
     return false;
   }
@@ -62,8 +71,8 @@ function processFile(file) {
 
   log(
     'Moved "%s" → event "%s" → %s/%s/',
-    file.getName(),
-    event.getTitle(),
+    fileName,
+    eventTitle,
     rule.destinationFolderId,
     createdTime.getFullYear()
   );
