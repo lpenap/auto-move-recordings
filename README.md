@@ -194,6 +194,32 @@ npm run push
 
 ---
 
+## Releasing
+
+Version history lives in [CHANGELOG.md](CHANGELOG.md), following
+[Keep a Changelog](https://keepachangelog.com) and [SemVer](https://semver.org).
+
+As you work, add entries under the `## [Unreleased]` heading (Added / Changed /
+Fixed / Security). To cut a release:
+
+```bash
+# 1. In CHANGELOG.md: rename "[Unreleased]" to the new version + date,
+#    then add a fresh empty "[Unreleased]" section above it.
+# 2. Bump the version in package.json to match.
+# 3. Commit, tag, and push (the tag must match the CHANGELOG link, e.g. v1.2.0).
+git commit -am "Release vX.Y.Z"
+git tag -a vX.Y.Z -m "vX.Y.Z — short summary"
+git push origin master --follow-tags
+
+# 4. Publish the GitHub release from the tag, using the changelog section as notes.
+gh release create vX.Y.Z --title "vX.Y.Z" --notes "…"
+```
+
+Bump rules: **patch** (`x.y.Z`) for fixes, **minor** (`x.Y.0`) for backwards-compatible
+features, **major** (`X.0.0`) for breaking config or behavior changes.
+
+---
+
 ## Utility functions
 
 | Function | Description |
