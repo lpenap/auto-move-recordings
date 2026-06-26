@@ -2,7 +2,9 @@
 
 A Google Apps Script that automatically moves Google Meet recordings from your
 Drive to configured destination folders (including Shared Drives), organized by
-year, based on matching calendar event names.
+year, based on matching the meeting name (read from the recording's file name).
+
+See [CHANGELOG.md](CHANGELOG.md) for the version history.
 
 ## How it works
 
